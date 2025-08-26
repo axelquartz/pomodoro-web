@@ -1,24 +1,33 @@
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+let time = document.querySelector('.time');
+const startButton = document.querySelector('.start');
+const resetButton = document.querySelector('.reset');
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+let timeLeft = 25;
+let timerId = null; // A variable to hold the timer ID
 
-setupCounter(document.querySelector('#counter'))
+function updateTimer() {
+  time.textContent = timeLeft;
+  timeLeft--;
+
+  if (timeLeft < 0) {
+    // Stop the timer when it reaches zero
+    clearInterval(timerId);
+    timerId = null; // Clear the timer ID
+    time.textContent = 'Time\'s up!';
+  }
+}
+
+startButton.addEventListener('click', function() {
+  // Prevent multiple timers from starting
+  if (timerId === null) {
+    timerId = setInterval(updateTimer, 1000);
+  }
+});
+
+resetButton.addEventListener('click', function() {
+  // Clear the timer and reset the display
+  clearInterval(timerId);
+  timerId = null; // Clear the timer ID
+  timeLeft = 25; // Reset the time
+  time.textContent = timeLeft;
+});
